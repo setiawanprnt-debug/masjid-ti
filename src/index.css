@@ -74,3 +74,62 @@ input[type="number"]::-webkit-outer-spin-button {
 input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
 }
+
+/* Responsive and positional images */
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Home page: Image on top of text */
+.home-page .ql-editor img, 
+.home-page .editable-content img,
+.home-page .card img {
+  display: block;
+  margin: 0 auto 15px auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Kajian and Berita page: Image on side of text */
+.kajian-page .ql-editor img, 
+.kajian-page .editable-content img,
+.kajian-page .card img,
+.berita-page .ql-editor img, 
+.berita-page .editable-content img,
+.berita-page .card img {
+  float: left;
+  margin: 0 20px 15px 0;
+  max-width: 40%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Clearfix for floated images */
+.kajian-page .card::after,
+.berita-page .card::after,
+.kajian-page .ql-editor::after,
+.berita-page .ql-editor::after,
+.berita-page .editable-content::after,
+.kajian-page .editable-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Adjust size for mobile */
+@media (max-width: 768px) {
+  .kajian-page .ql-editor img, 
+  .kajian-page .editable-content img,
+  .kajian-page .card img,
+  .berita-page .ql-editor img, 
+  .berita-page .editable-content img,
+  .berita-page .card img {
+    float: none;
+    display: block;
+    margin: 0 auto 15px auto;
+    max-width: 100%;
+  }
+}

@@ -31,6 +31,22 @@ const Pengaturan: React.FC = () => {
     setLoadingUsers(true);
     try {
       const { data, error } = await supabase.rpc('get_admin_user_list');
+      
+      // Fallback if RPC fails or returns nothing
+      if (error || !data || data.length === 0) {
+        const { data: rolesData, error: rolesError } = await supabase.from('user_roles').select('*');
+        if (!rolesError && rolesData && rolesData.length > 0) {
+          const fallbackData = rolesData.map((r: any) => ({
+            id: r.user_id,
+            email: r.email || `(Akun ID: ${r.user_id.substring(0,8)}...)`, // Display ID if email is not available
+            role: r.role
+          }));
+          setUsersList(fallbackData);
+          setLoadingUsers(false);
+          return;
+        }
+      }
+
       if (error) throw error;
       setUsersList(data || []);
     } catch (err: any) {

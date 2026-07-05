@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useFinance } from '../context/FinanceContext';
 import { useAuth } from '../context/AuthContext';
 import { useContent } from '../context/ContentContext';
+import { useBerita } from '../context/BeritaContext';
 import EditableContent from '../components/EditableContent';
 import './Home.css';
 
@@ -9,8 +11,10 @@ const Home: React.FC = () => {
   const { transactions, getBalance } = useFinance();
   const { user } = useAuth();
   const { content, updateContent, setFirstArrayContent } = useContent();
+  const { beritaList } = useBerita();
   
   const isSuperadmin = user?.role === 'superadmin';
+  const latestBerita = beritaList.length > 0 ? beritaList[0] : null;
 
   const formatRupiah = (amount: number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
@@ -55,6 +59,27 @@ const Home: React.FC = () => {
               onSave={(val) => setFirstArrayContent('jadwal', val)} 
               canEdit={isSuperadmin} 
             />
+            <div style={{ marginTop: '15px' }}>
+              <Link to="/kajian" style={{ color: 'var(--primary-color)', fontWeight: 'bold', textDecoration: 'underline' }}>Kajian lainnya &raquo;</Link>
+            </div>
+          </div>
+          <div className="card" style={{ position: 'relative' }}>
+            <h2 style={{ color: 'var(--primary-color)' }}>Berita Terkini</h2>
+            {latestBerita ? (
+              <div>
+                <h3 style={{ fontSize: '1.2rem', marginBottom: '10px' }}>{latestBerita.judul}</h3>
+                <div 
+                  className="ql-editor" 
+                  style={{ padding: 0 }}
+                  dangerouslySetInnerHTML={{ __html: latestBerita.konten }} 
+                />
+              </div>
+            ) : (
+              <p style={{ color: 'var(--text-light)' }}>Belum ada berita.</p>
+            )}
+            <div style={{ marginTop: '15px' }}>
+              <Link to="/berita" style={{ color: 'var(--primary-color)', fontWeight: 'bold', textDecoration: 'underline' }}>Berita lainnya &raquo;</Link>
+            </div>
           </div>
         </div>
 

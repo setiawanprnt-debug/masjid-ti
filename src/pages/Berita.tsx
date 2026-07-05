@@ -60,7 +60,7 @@ const Berita: React.FC = () => {
 
   if (isEditing) {
     return (
-      <div className="container" style={{ marginTop: '20px' }}>
+      <div className="container berita-page" style={{ marginTop: '20px' }}>
         <h2 style={{ color: 'var(--primary-color)', marginBottom: '15px' }}>{editId ? 'Edit Berita' : 'Tambah Berita'}</h2>
         <form onSubmit={handleSave}>
           <div style={{ marginBottom: '15px' }}>
@@ -98,7 +98,7 @@ const Berita: React.FC = () => {
   }
 
   return (
-    <div className="container" style={{ marginTop: '20px' }}>
+    <div className="container berita-page" style={{ marginTop: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h2 style={{ color: 'var(--primary-color)' }}>Berita & Artikel</h2>
         {canEdit && (
