@@ -86,7 +86,7 @@ const Home: React.FC = () => {
         <div className="sidebar">
           <div className="card finance-widget">
             <h3>Total Saldo Kas</h3>
-            <div className="balance-amount">{formatRupiah(getBalance())}</div>
+            <div className="balance-amount">{formatRupiah(getBalance(undefined, new Date()))}</div>
             
             <h4 style={{marginTop: '20px', marginBottom: '10px'}}>10 Transaksi Terakhir</h4>
             {recentTransactions.length > 0 ? (
