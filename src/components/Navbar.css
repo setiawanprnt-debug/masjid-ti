@@ -115,6 +115,16 @@
   }
 }
 
+@media (max-width: 480px) {
+  .welcome-text {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+  }
+}
+
 @media (max-width: 900px) {
   .mobile-menu-btn {
     display: block;

@@ -19,6 +19,20 @@
   opacity: 0.9;
 }
 
+.hero-bismillah {
+  font-family: Amiri, "Traditional Arabic", "Scheherazade New", serif;
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.hero-subtitle {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 .home-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -86,5 +100,23 @@
 @media (max-width: 900px) {
   .home-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 30px 15px;
+  }
+  
+  .hero-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .hero-bismillah {
+    font-size: 1.8rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.2rem;
   }
 }

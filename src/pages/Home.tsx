@@ -26,11 +26,11 @@ const Home: React.FC = () => {
     <div className="home-page">
       <div className="hero-section">
         <div className="hero-content">
-          <div style={{ fontFamily: 'Amiri, "Traditional Arabic", "Scheherazade New", serif', fontSize: '2.5rem', marginBottom: '15px', fontWeight: 'normal', lineHeight: '1' }}>
+          <div className="hero-bismillah">
             بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
           </div>
           <h1>Selamat Datang di Website Resmi</h1>
-          <p style={{ fontSize: '1.8rem', fontWeight: 'bold', marginTop: '10px' }}>Masjid Tunas Ilmu – Banyuwangi</p>
+          <p className="hero-subtitle">Masjid Tunas Ilmu – Banyuwangi</p>
         </div>
       </div>
 

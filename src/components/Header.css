@@ -108,3 +108,25 @@
     align-items: center;
   }
 }
+
+@media (max-width: 768px) {
+  .logo-container h2 {
+    font-size: 1rem;
+    text-align: left;
+  }
+  
+  .logo-container img {
+    height: 50px !important;
+  }
+  
+  .prayer-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+  }
+
+  .running-text {
+    font-size: 0.75rem;
+  }
+}
