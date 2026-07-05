@@ -275,19 +275,19 @@ const Keuangan: React.FC = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '15px', marginBottom: '30px' }}>
               <div style={{ background: '#f4f6f8', padding: '15px', borderRadius: '8px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                 <h4 style={{ color: 'var(--text-light)', marginBottom: '5px' }}>Kas Bank</h4>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('bank'))}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('bank', new Date(endDate)))}</div>
               </div>
               <div style={{ background: '#f4f6f8', padding: '15px', borderRadius: '8px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                 <h4 style={{ color: 'var(--text-light)', marginBottom: '5px' }}>Kas Bendahara</h4>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('bendahara'))}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('bendahara', new Date(endDate)))}</div>
               </div>
               <div style={{ background: '#f4f6f8', padding: '15px', borderRadius: '8px', textAlign: 'center', border: '1px solid var(--border-color)' }}>
                 <h4 style={{ color: 'var(--text-light)', marginBottom: '5px' }}>Kas Ketua</h4>
-                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('ketua'))}</div>
+                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--primary-color)' }}>{formatRupiah(getBalance('ketua', new Date(endDate)))}</div>
               </div>
               <div className="total-balance-box" style={{ background: 'white', color: 'var(--primary-color)', padding: '15px', borderRadius: '8px', textAlign: 'center', border: '4px solid var(--primary-color)', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
                 <h4 style={{ marginBottom: '5px', textTransform: 'uppercase', letterSpacing: '1px' }}>TOTAL SALDO KAS</h4>
-                <div style={{ fontSize: '1.6rem', fontWeight: '900' }}>{formatRupiah(getBalance())}</div>
+                <div style={{ fontSize: '1.6rem', fontWeight: '900' }}>{formatRupiah(getBalance(undefined, new Date(endDate)))}</div>
               </div>
             </div>
 
@@ -477,19 +477,19 @@ const Keuangan: React.FC = () => {
                 <tbody>
                   <tr>
                     <td style={{ padding: '10px', border: '1px solid var(--border-color)' }}>Kas Bank</td>
-                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('bank'))}</td>
+                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('bank', new Date(parseInt(filterYear), parseInt(filterMonth) + 1, 0)))}</td>
                   </tr>
                   <tr>
                     <td style={{ padding: '10px', border: '1px solid var(--border-color)' }}>Kas Bendahara</td>
-                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('bendahara'))}</td>
+                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('bendahara', new Date(parseInt(filterYear), parseInt(filterMonth) + 1, 0)))}</td>
                   </tr>
                   <tr>
                     <td style={{ padding: '10px', border: '1px solid var(--border-color)' }}>Kas Operasional Ketua</td>
-                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('ketua'))}</td>
+                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(getBalance('ketua', new Date(parseInt(filterYear), parseInt(filterMonth) + 1, 0)))}</td>
                   </tr>
                   <tr style={{ backgroundColor: '#eef8f5' }}>
                     <td style={{ padding: '10px', border: '1px solid var(--border-color)', fontWeight: 'bold' }}>Total Saldo Kas</td>
-                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right', fontWeight: 'bold' }}>{formatRupiah(getBalance())}</td>
+                    <td style={{ padding: '10px', border: '1px solid var(--border-color)', textAlign: 'right', fontWeight: 'bold' }}>{formatRupiah(getBalance(undefined, new Date(parseInt(filterYear), parseInt(filterMonth) + 1, 0)))}</td>
                   </tr>
                 </tbody>
               </table>

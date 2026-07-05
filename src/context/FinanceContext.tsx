@@ -11,6 +11,7 @@ export interface Transaction {
   type: 'in' | 'out' | 'transfer';
   account: AccountType;
   toAccount?: AccountType;
+  created_at?: string; // Menambahkan created_at
 }
 
 interface FinanceContextType {
@@ -18,7 +19,7 @@ interface FinanceContextType {
   addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
   updateTransaction: (id: string, updated: Omit<Transaction, 'id'>) => Promise<void>;
   deleteTransaction: (id: string) => Promise<void>;
-  getBalance: (account?: AccountType) => number;
+  getBalance: (account?: AccountType, endDate?: Date) => number;
   getBalanceBeforeDate: (date: Date, account?: AccountType) => number;
 }
 
@@ -30,11 +31,10 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     fetchTransactions();
     
-    // Subscribe to changes
     const channel = supabase
       .channel('public:transactions')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'transactions' }, _payload => {
-        fetchTransactions(); // Simple approach: refetch all on any change
+        fetchTransactions();
       })
       .subscribe();
 
@@ -47,7 +47,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const { data, error } = await supabase
       .from('transactions')
       .select('*')
-      .order('date', { ascending: false });
+      .order('date', { ascending: false })
+      .order('created_at', { ascending: false }); // Sort ke-2: dibuat terakhir
       
     if (error) {
       console.error('Error fetching transactions:', error);
@@ -55,7 +56,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
     
     if (data) {
-      // mapping toAccount naming if necessary (DB has "toAccount")
       setTransactions(data as Transaction[]);
     }
   };
@@ -101,8 +101,14 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
-  const getBalance = (account?: AccountType) => {
+  const getBalance = (account?: AccountType, endDate?: Date) => {
     return transactions.reduce((total, t) => {
+      if (endDate) {
+        const tDate = new Date(t.date);
+        tDate.setHours(23, 59, 59, 999);
+        if (tDate > endDate) return total; // Lewati transaksi yang lebih baru dari endDate
+      }
+
       if (!account) {
         if (t.type === 'in') return total + t.amount;
         if (t.type === 'out') return total - t.amount;
@@ -124,7 +130,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const getBalanceBeforeDate = (date: Date, account?: AccountType) => {
     return transactions.reduce((total, t) => {
       const tDate = new Date(t.date);
-      if (tDate >= date) return total; // Only count transactions BEFORE the given date
+      if (tDate >= date) return total;
 
       if (!account) {
         if (t.type === 'in') return total + t.amount;
