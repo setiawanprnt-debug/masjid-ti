@@ -104,9 +104,10 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const getBalance = (account?: AccountType, endDate?: Date) => {
     return transactions.reduce((total, t) => {
       if (endDate) {
+        const endOfDay = new Date(endDate);
+        endOfDay.setHours(23, 59, 59, 999);
         const tDate = new Date(t.date);
-        tDate.setHours(23, 59, 59, 999);
-        if (tDate > endDate) return total; // Lewati transaksi yang lebih baru dari endDate
+        if (tDate > endOfDay) return total; // Lewati transaksi yang lebih baru dari endDate
       }
 
       if (!account) {
