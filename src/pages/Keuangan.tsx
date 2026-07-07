@@ -134,6 +134,7 @@ const Keuangan: React.FC = () => {
     <div className="kop-surat only-print">
       <img src={logoSrc} alt="Logo Masjid Tunas Ilmu" />
       <div className="kop-surat-text">
+        <h1>YAYASAN MIFTAHUL HIDAYAH</h1>
         <h2>MASJID TUNAS ILMU</h2>
         <p>Dusun Krajan RT.03/RW.01 Desa Buluagung, Kecamatan Siliragung</p>
         <p>Kabupaten Banyuwangi, Telepon: 0813 3209 6116</p>
@@ -588,11 +589,17 @@ const Keuangan: React.FC = () => {
           .kop-surat-text {
             text-align: center;
           }
+
+           .kop-surat-text h1 {
+            margin: 0 0 5px 0;
+            font-size: 20px;
+            color: black !important;
+          }
           
           .kop-surat-text h2 {
             margin: 0 0 5px 0;
             font-size: 24px;
-            color: black !important;
+            color: green  !important;
           }
           
           .kop-surat-text p {
