@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useFinance } from '../context/FinanceContext';
 import type { AccountType, Transaction } from '../context/FinanceContext';
 import logoSrc from '../assets/Logo_TI.png';
+import logoMhSrc from '../assets/Logo_MH.png';
 
 const Keuangan: React.FC = () => {
   const { user } = useAuth();
@@ -117,6 +118,12 @@ const Keuangan: React.FC = () => {
     }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [transactions, filterMonth, filterYear]);
 
+  const jamaahSaldoAwal = useMemo(() => {
+    const start = new Date(startDate);
+    start.setHours(0, 0, 0, 0);
+    return getBalanceBeforeDate(start);
+  }, [startDate, getBalanceBeforeDate]);
+
   // Calculations for Bendahara Main Report
   const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
   const periodDate = new Date(parseInt(filterYear), parseInt(filterMonth), 1);
@@ -139,8 +146,25 @@ const Keuangan: React.FC = () => {
         <p>Dusun Krajan RT.03/RW.01 Desa Buluagung, Kecamatan Siliragung</p>
         <p>Kabupaten Banyuwangi, Telepon: 0813 3209 6116</p>
       </div>
+      <img src={logoMhSrc} alt="Logo Yayasan Miftahul Hidayah" />
     </div>
   );
+
+  const SignatureSection = () => {
+    const today = new Date().toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+    return (
+      <div className="signature-section only-print" style={{ marginTop: '50px', display: 'flex', justifyContent: 'space-between', padding: '0 30px' }}>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginBottom: '60px' }}>Mengetahui,<br/>Ketua Takmir</p>
+          <p style={{ fontWeight: 'bold' }}>( .................................... )</p>
+        </div>
+        <div style={{ textAlign: 'center' }}>
+          <p style={{ marginBottom: '60px' }}>Banyuwangi, {today}<br/>Bendahara</p>
+          <p style={{ fontWeight: 'bold' }}>( .................................... )</p>
+        </div>
+      </div>
+    );
+  };
 
   if (!user || !['ketua', 'bendahara', 'superadmin'].includes(user.role)) {
     return <Navigate to="/" />;
@@ -301,40 +325,64 @@ const Keuangan: React.FC = () => {
                     <th style={{ padding: '12px', border: '1px solid #085f47' }}>Pos Kas</th>
                     <th style={{ padding: '12px', textAlign: 'right', border: '1px solid #085f47' }}>Penerimaan</th>
                     <th style={{ padding: '12px', textAlign: 'right', border: '1px solid #085f47' }}>Pengeluaran</th>
+                    <th style={{ padding: '12px', textAlign: 'right', border: '1px solid #085f47' }}>Saldo</th>
                     {canEditKeuangan && <th style={{ padding: '12px', textAlign: 'center' }} className="no-print">Aksi</th>}
                   </tr>
                 </thead>
                 <tbody>
-                  {jamaahTransactions.length > 0 ? jamaahTransactions.map(t => (
-                    <tr key={t.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                      <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)', borderLeft: '1px solid var(--border-color)' }}>
-                        {new Date(t.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-                      </td>
-                      <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)' }}>{t.description}</td>
-                      <td style={{ padding: '12px', textTransform: 'capitalize', borderRight: '1px solid var(--border-color)' }}>
-                        {t.type === 'transfer' ? `${t.account} -> ${t.toAccount}` : t.account}
-                      </td>
-                      <td style={{ padding: '12px', textAlign: 'right', color: 'var(--primary-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
-                        {t.type === 'in' ? formatRupiah(t.amount) : '-'}
-                      </td>
-                      <td style={{ padding: '12px', textAlign: 'right', color: 'var(--danger-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
-                        {t.type === 'out' ? formatRupiah(t.amount) : '-'}
-                      </td>
-                      {canEditKeuangan && (
-                        <td style={{ padding: '12px', textAlign: 'center' }} className="no-print">
-                          <button onClick={() => handleEdit(t)} style={{ background: 'none', border: 'none', color: '#17a2b8', cursor: 'pointer', marginRight: '10px', fontWeight: 'bold' }}>Edit</button>
-                          <button onClick={() => handleDelete(t.id)} style={{ background: 'none', border: 'none', color: 'var(--danger-color)', cursor: 'pointer', fontWeight: 'bold' }}>Hapus</button>
-                        </td>
-                      )}
-                    </tr>
-                  )) : (
-                    <tr>
-                      <td colSpan={6} style={{ padding: '20px', textAlign: 'center', color: 'var(--text-light)' }}>Tidak ada transaksi pada periode ini.</td>
-                    </tr>
-                  )}
+                  <tr>
+                    <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)', borderLeft: '1px solid var(--border-color)' }}>
+                      {new Date(startDate).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                    </td>
+                    <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)', fontWeight: 'bold' }}>Saldo Awal</td>
+                    <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)' }}>-</td>
+                    <td style={{ padding: '12px', textAlign: 'right', borderRight: '1px solid var(--border-color)' }}>-</td>
+                    <td style={{ padding: '12px', textAlign: 'right', borderRight: '1px solid var(--border-color)' }}>-</td>
+                    <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>{formatRupiah(jamaahSaldoAwal)}</td>
+                    {canEditKeuangan && <td style={{ padding: '12px' }} className="no-print"></td>}
+                  </tr>
+                  {(() => {
+                    let runningBalanceJamaah = jamaahSaldoAwal;
+                    return jamaahTransactions.length > 0 ? jamaahTransactions.map(t => {
+                      if (t.type === 'in') runningBalanceJamaah += t.amount;
+                      if (t.type === 'out') runningBalanceJamaah -= t.amount;
+                      
+                      return (
+                        <tr key={t.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                          <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)', borderLeft: '1px solid var(--border-color)' }}>
+                            {new Date(t.date).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                          </td>
+                          <td style={{ padding: '12px', borderRight: '1px solid var(--border-color)' }}>{t.description}</td>
+                          <td style={{ padding: '12px', textTransform: 'capitalize', borderRight: '1px solid var(--border-color)' }}>
+                            {t.type === 'transfer' ? `${t.account} -> ${t.toAccount}` : t.account}
+                          </td>
+                          <td style={{ padding: '12px', textAlign: 'right', color: 'var(--primary-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
+                            {t.type === 'in' ? formatRupiah(t.amount) : '-'}
+                          </td>
+                          <td style={{ padding: '12px', textAlign: 'right', color: 'var(--danger-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
+                            {t.type === 'out' ? formatRupiah(t.amount) : '-'}
+                          </td>
+                          <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
+                            {formatRupiah(runningBalanceJamaah)}
+                          </td>
+                          {canEditKeuangan && (
+                            <td style={{ padding: '12px', textAlign: 'center' }} className="no-print">
+                              <button onClick={() => handleEdit(t)} style={{ background: 'none', border: 'none', color: '#17a2b8', cursor: 'pointer', marginRight: '10px', fontWeight: 'bold' }}>Edit</button>
+                              <button onClick={() => handleDelete(t.id)} style={{ background: 'none', border: 'none', color: 'var(--danger-color)', cursor: 'pointer', fontWeight: 'bold' }}>Hapus</button>
+                            </td>
+                          )}
+                        </tr>
+                      );
+                    }) : (
+                      <tr>
+                        <td colSpan={canEditKeuangan ? 7 : 6} style={{ padding: '20px', textAlign: 'center', color: 'var(--text-light)' }}>Tidak ada transaksi pada periode ini.</td>
+                      </tr>
+                    );
+                  })()}
                 </tbody>
               </table>
             </div>
+            <SignatureSection />
           </>
         ) : (
           <>
@@ -407,6 +455,7 @@ const Keuangan: React.FC = () => {
                   </tr>
                 </tbody>
               </table>
+              <SignatureSection />
             </div>
 
             {/* 2. Buku Kas Umum */}
@@ -458,6 +507,7 @@ const Keuangan: React.FC = () => {
                   })()}
                 </tbody>
               </table>
+              <SignatureSection />
             </div>
 
             {/* 3. Laporan Saldo Kas & Mutasi */}
@@ -530,6 +580,7 @@ const Keuangan: React.FC = () => {
                   )}
                 </tbody>
               </table>
+              <SignatureSection />
             </div>
           </>
         )}
@@ -562,6 +613,15 @@ const Keuangan: React.FC = () => {
           .no-print { display: none !important; }
           .only-print { display: block; }
           
+          thead { display: table-header-group; }
+          tfoot { display: table-footer-group; }
+          tr { page-break-inside: avoid; }
+          
+          table th, table td {
+            font-size: 11px !important;
+            padding: 6px !important;
+          }
+          
           .print-page {
             page-break-after: always;
             margin-bottom: 20px;
@@ -574,7 +634,7 @@ const Keuangan: React.FC = () => {
           .kop-surat {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             border-bottom: 3px solid black;
             padding-bottom: 15px;
             margin-bottom: 25px;
@@ -583,11 +643,12 @@ const Keuangan: React.FC = () => {
           .kop-surat img {
             width: 80px;
             height: auto;
-            margin-right: 20px;
           }
           
           .kop-surat-text {
             text-align: center;
+            flex: 1;
+            padding: 0 15px;
           }
 
            .kop-surat-text h1 {
