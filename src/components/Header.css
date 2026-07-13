@@ -129,4 +129,29 @@
   .running-text {
     font-size: 0.75rem;
   }
+
+  .prayer-times {
+    width: 100%;
+  }
+
+  .prayer-blocks {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px;
+    padding-bottom: 0;
+  }
+
+  .prayer-block {
+    min-width: 0;
+    flex: 1;
+    padding: 6px 2px;
+  }
+
+  .prayer-block span {
+    font-size: 0.55rem;
+  }
+
+  .prayer-block strong {
+    font-size: 0.85rem;
+  }
 }

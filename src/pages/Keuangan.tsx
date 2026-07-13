@@ -146,7 +146,7 @@ const Keuangan: React.FC = () => {
         <p>Dusun Krajan RT.03/RW.01 Desa Buluagung, Kecamatan Siliragung</p>
         <p>Kabupaten Banyuwangi, Telepon: 0813 3209 6116</p>
       </div>
-      <img src={logoMhSrc} alt="Logo Yayasan Miftahul Hidayah" />
+      <img src={logoMhSrc} alt="Logo Yayasan Miftahul Hidayah" style={{ width: '100px' }} />
     </div>
   );
 
@@ -357,10 +357,10 @@ const Keuangan: React.FC = () => {
                             {t.type === 'transfer' ? `${t.account} -> ${t.toAccount}` : t.account}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'right', color: 'var(--primary-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
-                            {t.type === 'in' ? formatRupiah(t.amount) : '-'}
+                            {(t.type === 'in' || t.type === 'transfer') ? formatRupiah(t.amount) : '-'}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'right', color: 'var(--danger-color)', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
-                            {t.type === 'out' ? formatRupiah(t.amount) : '-'}
+                            {(t.type === 'out' || t.type === 'transfer') ? formatRupiah(t.amount) : '-'}
                           </td>
                           <td style={{ padding: '12px', textAlign: 'right', fontWeight: 'bold', borderRight: '1px solid var(--border-color)' }}>
                             {formatRupiah(runningBalanceJamaah)}
@@ -498,8 +498,8 @@ const Keuangan: React.FC = () => {
                           <td style={{ padding: '8px', border: '1px solid var(--border-color)' }}>
                             {t.description} {t.type === 'transfer' ? `(Mutasi: ${t.account} -> ${t.toAccount})` : ''}
                           </td>
-                          <td style={{ padding: '8px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{t.type === 'in' ? formatRupiah(t.amount) : ''}</td>
-                          <td style={{ padding: '8px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{t.type === 'out' ? formatRupiah(t.amount) : ''}</td>
+                          <td style={{ padding: '8px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{(t.type === 'in' || t.type === 'transfer') ? formatRupiah(t.amount) : ''}</td>
+                          <td style={{ padding: '8px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{(t.type === 'out' || t.type === 'transfer') ? formatRupiah(t.amount) : ''}</td>
                           <td style={{ padding: '8px', border: '1px solid var(--border-color)', textAlign: 'right' }}>{formatRupiah(runningBalance)}</td>
                         </tr>
                       );

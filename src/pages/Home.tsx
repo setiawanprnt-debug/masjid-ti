@@ -20,7 +20,7 @@ const Home: React.FC = () => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(amount);
   };
 
-  const recentTransactions = transactions.slice(0, 10);
+  const recentTransactions = transactions.filter(t => t.type !== 'transfer').slice(0, 10);
 
   return (
     <div className="home-page">
